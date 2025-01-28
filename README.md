@@ -1,16 +1,32 @@
 # deeptask
 
-A new Flutter project.
+Deeptask is a Flutter project designed to help you manage and track your tasks efficiently.
+
+## Features
+
+- Task management
+- Usage statistics
+- Permission handling
+- Dark mode support
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/dhwalief/deeptask.git
+2. Enter directory:
+   ```sh
+   cd deeptask
+3. install dependencies:
+   ```sh
+   flutter pub get
+4. Run application:
+   ```sh
+   flutter run
