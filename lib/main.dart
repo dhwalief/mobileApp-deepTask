@@ -1,3 +1,4 @@
+import 'package:deeptask/pages/feature_page/add_task_page.dart';
 import 'package:deeptask/pages/main_page.dart';
 import 'package:deeptask/pages/setting_page.dart';
 import 'package:deeptask/pages/stat_page.dart';
@@ -6,9 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Pastikan Flutter sudah diinisialisasi
-  await initializeDateFormatting('id_ID', null); // Inisialisasi untuk Indonesia
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   runApp(const MyApp());
 }
 
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
           '/taskpage': (context) => const TaskPage(),
           '/statpage': (context) => const StatPage(),
           '/settingpage': (context) => const SettingPage(),
+          '/addtaskpage': (context) => const AddTaskPage(),
         },
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(

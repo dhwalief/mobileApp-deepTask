@@ -1,3 +1,4 @@
+import 'package:deeptask/util/permission_handler_page_util.dart';
 import 'package:flutter/material.dart';
 
 class StatPage extends StatelessWidget {
@@ -6,9 +7,7 @@ class StatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text('Stat Page'),
-      ),
+      body: PermissionHandlerUtil(),
     );
   }
 }

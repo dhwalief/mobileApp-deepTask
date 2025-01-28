@@ -36,6 +36,9 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         selectedItemColor: Theme.of(context).colorScheme.secondary,
         enableFeedback: false,
+        // unselectedItemColor: Colors.grey,
+        selectedIconTheme: const IconThemeData(),
+        showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
