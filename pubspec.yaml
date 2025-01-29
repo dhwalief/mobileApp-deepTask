@@ -34,6 +34,7 @@ dependencies:
   # permission_handler: any
   permission_handler: ^10.4.3
   flutter_slidable: any
+  fl_chart: any
   # usage_stats_new: ^2.0.5
   # usage: any
   intl: any

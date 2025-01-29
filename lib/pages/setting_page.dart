@@ -7,41 +7,40 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        foregroundColor: Theme.of(context).colorScheme.surface,
-        title:
-            //  Text('Setting')
-            Text(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: Text(
           'Setting',
-          style: TextStyle(
-              fontSize: 18, color: Theme.of(context).colorScheme.primary),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              color: Theme.of(context).colorScheme.primary,
               child: ListTile(
-                title: Text('Dark Mode'),
-                trailing: Switch(
-                  value: false,
-                  onChanged: (value) {},
+                title: Text("Preference"),
+                trailing: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/preferenceSetting');
+                },
               ),
+              color: Theme.of(context).colorScheme.surface,
             ),
             Card(
-              color: Theme.of(context).colorScheme.primary,
               child: ListTile(
-                title: Text('Notification'),
-                trailing: Switch(
-                  value: false,
-                  onChanged: (value) {},
+                title: Text("Block App Setting"),
+                trailing: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
-            ),
+              color: Theme.of(context).colorScheme.surface,
+            )
           ],
         ),
       ),

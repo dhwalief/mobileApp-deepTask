@@ -29,7 +29,6 @@ class _DateNowUtilState extends State<DateNowUtil> {
     return Text(
       _dateNow,
       style: TextStyle(
-        color: Theme.of(context).colorScheme.secondary, // Sesuaikan warna teks
         fontSize: widget.fontSize, // Sesuaikan ukuran teks
       ),
     );

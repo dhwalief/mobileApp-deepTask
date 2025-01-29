@@ -12,8 +12,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: Text('Add Task'),
       ),
       body: Padding(
@@ -23,23 +23,47 @@ class _AddTaskPageState extends State<AddTaskPage> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Task Name',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Task Description',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Input Date',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Input Timer',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {},
-              child: Text('Add Task'),
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   )),
+              child: Text('Add Task',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary)),
             ),
           ],
         ),

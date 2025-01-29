@@ -1,4 +1,7 @@
+import 'package:deeptask/display/details_task_display.dart';
+import 'package:deeptask/display/stat_display.dart';
 import 'package:deeptask/pages/feature_page/add_task_page.dart';
+import 'package:deeptask/pages/feature_page/preference_setting_page.dart';
 import 'package:deeptask/pages/main_page.dart';
 import 'package:deeptask/pages/setting_page.dart';
 import 'package:deeptask/pages/stat_page.dart';
@@ -22,21 +25,32 @@ class MyApp extends StatelessWidget {
         home: MainPage(),
         routes: {
           '/taskpage': (context) => const TaskPage(),
-          '/statpage': (context) => const StatPage(),
+          '/statpage': (context) => StatPage(),
           '/settingpage': (context) => const SettingPage(),
           '/addtaskpage': (context) => const AddTaskPage(),
+          //deploy
+          '/barchartpage': (context) => UsageBarChart(),
+          '/detailtaskpage': (context) => DetailsTaskDisplay(),
+          '/preferenceSetting': (context) => PreferenceSettingPage(),
         },
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: Color(0xFFFFFFFF),
+            primary: Color(0xFF1B264F),
+            onPrimary: Color(0xFFFFFFFF),
+            secondary: Color(0xFFFFFFFF),
+            onSecondary: Color(0xFF000000),
             surface: Color(0xFFF8F8F8),
-            primary: Color(0xFFFFFFFF),
-            onPrimary: Color(0xFF7c7c7c),
-            secondary: Color(0xFF1B264F),
+            onSurface: Color(0xFF000000),
+            surfaceContainerHigh: Color(0xFFFFFFFF),
+            onSurfaceVariant: Color(0xFFFFFFFF),
+            error: Color(0xFFB00020),
+            onError: Color(0xFFF8F8F8),
           ),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xfff8f8f8),
-          ),
+          useMaterial3: true,
+          // appBarTheme: const AppBarTheme(
+          //   backgroundColor: Color(0xfff8f8f8),
+          // ),
         ));
   }
 }

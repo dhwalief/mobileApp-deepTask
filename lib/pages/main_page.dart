@@ -33,8 +33,8 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: _changePage,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        selectedItemColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         enableFeedback: false,
         // unselectedItemColor: Colors.grey,
         selectedIconTheme: const IconThemeData(),
