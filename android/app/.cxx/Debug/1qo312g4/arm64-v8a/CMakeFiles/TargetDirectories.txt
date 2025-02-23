@@ -1,0 +1,2 @@
+/home/dhwalief/Development/mobileDevelopment/uncompleted/deeptask/android/app/.cxx/Debug/1qo312g4/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/dhwalief/Development/mobileDevelopment/uncompleted/deeptask/android/app/.cxx/Debug/1qo312g4/arm64-v8a/CMakeFiles/rebuild_cache.dir

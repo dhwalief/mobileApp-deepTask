@@ -1,10 +1,10 @@
 package com.example.deeptask
 
-import android.app.usage.UsageStats
+import android.app.AppOpsManager
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.os.Process
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -20,14 +20,24 @@ class MainActivity: FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
+                    "checkPermission" -> {
+                        val hasPermission = hasUsageStatsPermission()
+                        result.success(hasPermission)
+                    }
+                    "requestPermission" -> {
+                        openUsageAccessSettings()
+                        result.success(hasUsageStatsPermission())
+                    }
+                    "openUsageAccessSettings" -> {
+                        openUsageAccessSettings()
+                        result.success(null)
+                    }
                     "getUsageStats" -> {
                         if (hasUsageStatsPermission()) {
                             val filterSystemApps = call.argument<Boolean>("filterSystemApps") ?: true
                             val usageStats = getUsageStats(filterSystemApps)
-                            Log.d("UsageStats", usageStats.toString()) // Log data untuk debugging
                             result.success(usageStats)
                         } else {
-                            openUsageAccessSettings()
                             result.error("PERMISSION_DENIED", "Usage stats permission is not granted", null)
                         }
                     }
@@ -37,13 +47,13 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun hasUsageStatsPermission(): Boolean {
-        val appOps = getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
+        val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = appOps.checkOpNoThrow(
-            android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
-            android.os.Process.myUid(),
+            AppOpsManager.OPSTR_GET_USAGE_STATS,
+            Process.myUid(),
             packageName
         )
-        return mode == android.app.AppOpsManager.MODE_ALLOWED
+        return mode == AppOpsManager.MODE_ALLOWED
     }
 
     private fun openUsageAccessSettings() {

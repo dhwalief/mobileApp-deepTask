@@ -20,7 +20,8 @@ class _DateNowUtilState extends State<DateNowUtil> {
 
   void _updateTanggal() {
     setState(() {
-      _dateNow = DateFormat('d MMM, EEEE', 'id_ID').format(DateTime.now());
+      // _dateNow = DateFormat('d MMM, EEEE', 'id_ID').format(DateTime.now());
+      _dateNow = DateFormat('EEEE, d MMM yyyy', 'id_ID').format(DateTime.now());
     });
   }
 
