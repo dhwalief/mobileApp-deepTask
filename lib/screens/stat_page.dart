@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:deeptask/constant/app_color.dart';
 import 'package:deeptask/screens/permission_handler_page.dart';
-import 'package:deeptask/util/usage_stats.dart';
+import 'package:deeptask/util/usage_stats_util.dart';
 
 class StatPage extends StatefulWidget {
   const StatPage({super.key});

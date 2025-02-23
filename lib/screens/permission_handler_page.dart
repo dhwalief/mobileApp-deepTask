@@ -1,6 +1,6 @@
 import 'package:deeptask/constant/app_color.dart';
 import 'package:deeptask/screens/stat_page.dart';
-import 'package:deeptask/util/usage_stats.dart';
+import 'package:deeptask/util/usage_stats_util.dart';
 import 'package:flutter/material.dart';
 
 class PermissionHandlerPage extends StatefulWidget {
