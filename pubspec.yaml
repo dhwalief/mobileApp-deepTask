@@ -36,6 +36,7 @@ dependencies:
   flutter_slidable: any
   fl_chart: any
   persistent_bottom_nav_bar: any
+  syncfusion_flutter_charts: ^28.2.6
   intl: any
   # usage_stats_new: ^2.0.5
   # usage: any
