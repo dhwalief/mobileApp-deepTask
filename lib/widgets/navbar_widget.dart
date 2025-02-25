@@ -12,24 +12,31 @@ class BottomNavItem {
     required this.icon,
     required this.destination,
   });
-  final zeroList = List<int>.filled(3, 0, growable: true); // [0, 0, 0]
 }
 
 class PersistentBottomNavBar extends StatelessWidget {
   final List<BottomNavItem> items;
-  const PersistentBottomNavBar({super.key, required this.items});
+  final PersistentTabController controller;
+
+  const PersistentBottomNavBar({
+    super.key,
+    required this.items,
+    required this.controller,
+  });
+
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
       context,
+      controller: controller,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.all(Radius.circular(25)),
         boxShadow: [
           BoxShadow(
-            color: AppColor.shadow, // Warna shadow dengan transparansi
-            spreadRadius: 2, // Seberapa jauh shadow menyebar
-            blurRadius: 10, // Seberapa blur shadow
-            offset: Offset(0, 4), // Posisi shadow (x, y)
+            color: AppColor.shadow,
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -45,7 +52,7 @@ class PersistentBottomNavBar extends StatelessWidget {
           inactiveColorPrimary: Colors.grey,
         );
       }).toList(),
-      navBarStyle: NavBarStyle.style12, // Anda bisa memilih style yang sesuai
+      navBarStyle: NavBarStyle.style12,
     );
   }
 }
