@@ -1,6 +1,7 @@
+// lib/screens/permission_handler_page.dart
 import 'package:deeptask/constant/app_color.dart';
 import 'package:deeptask/screens/stat_page.dart';
-import 'package:deeptask/util/usage_stats_util.dart';
+import 'package:deeptask/services/permission_handler_service.dart';
 import 'package:flutter/material.dart';
 
 class PermissionHandlerPage extends StatefulWidget {
@@ -12,6 +13,9 @@ class PermissionHandlerPage extends StatefulWidget {
 
 class _PermissionHandlerPageState extends State<PermissionHandlerPage>
     with WidgetsBindingObserver {
+  final PermissionHandlerService _permissionHandlerService =
+      PermissionHandlerService();
+
   @override
   void initState() {
     super.initState();
@@ -25,25 +29,21 @@ class _PermissionHandlerPageState extends State<PermissionHandlerPage>
     super.dispose();
   }
 
-  // Metode ini dipanggil ketika aplikasi dilanjutkan
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // Ketika aplikasi dilanjutkan, periksa status izin
       _checkPermissionStatus();
     }
   }
 
-  // Metode untuk memeriksa status izin
   Future<void> _checkPermissionStatus() async {
-    final bool isGranted = await PermissionHandlerUtil.checkPermission();
+    final bool isGranted =
+        await _permissionHandlerService.checkPermissionStatus();
     if (isGranted) {
-      // Jika izin sudah diberikan, navigasi kembali ke OtherPage
       _navigateToOtherPage();
     }
   }
 
-  // Metode untuk menavigasi ke OtherPage
   void _navigateToOtherPage() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
@@ -52,10 +52,8 @@ class _PermissionHandlerPageState extends State<PermissionHandlerPage>
     );
   }
 
-  // Metode untuk membuka pengaturan izin akses penggunaan
   void _openUsageAccessSettings() async {
-    await PermissionHandlerUtil.openUsageAccessSettings();
-    // Setelah membuka pengaturan, biarkan didChangeAppLifecycleState menangani navigasi
+    await _permissionHandlerService.openUsageAccessSettings();
   }
 
   @override

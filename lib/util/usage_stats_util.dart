@@ -1,9 +1,9 @@
+// lib/util/usage_stats_util.dart
 import 'package:flutter/services.dart';
 
 class PermissionHandlerUtil {
   static const MethodChannel _channel = MethodChannel('com.example.usageStats');
 
-  // Metode untuk memeriksa status izin
   static Future<bool> checkPermission() async {
     try {
       final bool hasPermission = await _channel.invokeMethod('checkPermission');
@@ -14,7 +14,6 @@ class PermissionHandlerUtil {
     }
   }
 
-  // Metode untuk membuka pengaturan izin akses penggunaan
   static Future<void> openUsageAccessSettings() async {
     try {
       await _channel.invokeMethod('openUsageAccessSettings');

@@ -13,3 +13,5 @@ class AppColor {
 
   static const Color shadow = Color(0xFFFAfAfA);
 }
+
+ThemeData lightMode = ThemeData(colorScheme: ColorScheme.light());

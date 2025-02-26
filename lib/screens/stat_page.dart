@@ -1,9 +1,12 @@
+// lib/screens/stat_page.dart
+import 'package:deeptask/data/app_usage_data.dart';
+import 'package:deeptask/services/permission_handler_service.dart';
+import 'package:deeptask/services/usage_stats_service.dart';
 import 'package:deeptask/widgets/stats_chart_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:deeptask/constant/app_color.dart';
 import 'package:deeptask/screens/permission_handler_page.dart';
-import 'package:deeptask/util/usage_stats_util.dart';
-import 'package:deeptask/widgets/list_tile_widget.dart';
+import 'dart:convert'; // Untuk decode base64
 
 class StatPage extends StatefulWidget {
   const StatPage({super.key});
@@ -15,30 +18,30 @@ class StatPage extends StatefulWidget {
 class _StatPageState extends State<StatPage> {
   bool _isGranted = false;
   List<AppUsageData> _usageData = [];
+  final PermissionHandlerService _permissionHandlerService =
+      PermissionHandlerService();
+  final UsageStatsService _usageStatsService = UsageStatsService();
 
   @override
   void initState() {
     super.initState();
-    _checkPermissionStatus(); // Cek status izin saat halaman di-load
+    _checkPermissionStatus();
   }
 
-  // Metode untuk memeriksa status izin
   Future<void> _checkPermissionStatus() async {
-    final bool isGranted = await PermissionHandlerUtil.checkPermission();
+    final bool isGranted =
+        await _permissionHandlerService.checkPermissionStatus();
     setState(() {
       _isGranted = isGranted;
     });
 
-    // Jika izin belum diberikan, navigasi ke PermissionHandlerPage
     if (!isGranted) {
       _navigateToPermissionPage();
     } else {
-      // Jika izin diberikan, ambil data penggunaan aplikasi
       _fetchUsageStats();
     }
   }
 
-  // Metode untuk menavigasi ke PermissionHandlerPage
   void _navigateToPermissionPage() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).pushReplacement(
@@ -49,61 +52,26 @@ class _StatPageState extends State<StatPage> {
     });
   }
 
-  // Metode untuk mengambil data penggunaan aplikasi
   Future<void> _fetchUsageStats() async {
-    final List<dynamic> stats =
-        await UsageStats.getUsageStats(true); // Ambil data dari UsageStats
+    final List<AppUsageData> usageData =
+        await _usageStatsService.fetchUsageStats();
     setState(() {
-      _usageData = stats
-          .map((data) {
-            final packageName = data['packageName'] as String;
-            final appName = _extractAppName(packageName); // Ambil nama aplikasi
-            final usageTime = (data['totalTimeInForeground'] as int) ~/
-                60000; // Konversi ke menit
-            return AppUsageData(appName, usageTime);
-          })
-          .where(
-              (data) => data.usageTime > 0) // Filter data dengan usageTime > 0
-          .toList();
+      _usageData = usageData;
     });
   }
 
-  // Future<void> _fetchUsageStatsDetail() async {
-  //   final List<dynamic> stats = await UsageStats.getUsageStats(true);
-  //   setState(() {
-  //     _usageData = stats
-  //         .map((data) {
-  //           final packageName = data['packageName'] as String;
-  //           final appName = _extractAppName(packageName);
-  //           final usageTime = (data['totalTimeInForeground'] as int) ~/ 60000;
-  //           final iconBase64 =
-  //               data['appIcon'] as String? ?? ""; // Tambahkan ikon
-
-  //           return AppUsageDataTile(appName, usageTime, iconBase64);
-  //         })
-  //         .where((data) => data.usageTime > 0)
-  //         .toList();
-  //   });
-  // }
-
-  // Metode untuk mengambil nama aplikasi setelah titik terakhir atau underscore terakhir
-  String _extractAppName(String packageName) {
-    // Cari indeks terakhir dari titik (.) atau underscore (_)
-    final lastDotIndex = packageName.lastIndexOf('.');
-    final lastUnderscoreIndex = packageName.lastIndexOf('_');
-
-    // Tentukan indeks terakhir yang valid
-    final lastSeparatorIndex = (lastDotIndex > lastUnderscoreIndex)
-        ? lastDotIndex
-        : lastUnderscoreIndex;
-
-    // Jika ditemukan titik atau underscore, ambil substring setelahnya
-    if (lastSeparatorIndex != -1) {
-      return packageName.substring(lastSeparatorIndex + 1);
+  Widget _buildAppIcon(String? iconBase64) {
+    if (iconBase64 == null || iconBase64.isEmpty) {
+      return Icon(Icons.android, size: 40); // Ikon default
+    } else {
+      final imageBytes = base64Decode(iconBase64);
+      return Image.memory(
+        imageBytes,
+        width: 40,
+        height: 40,
+        fit: BoxFit.cover,
+      );
     }
-
-    // Jika tidak ada titik atau underscore, kembalikan nama asli
-    return packageName;
   }
 
   @override
@@ -126,21 +94,48 @@ class _StatPageState extends State<StatPage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Container(
-                    height: 300,
+                  Expanded(
                     child: _usageData.isEmpty
-                        ? Center(child: CircularProgressIndicator())
-                        : UsageStatsChart(
-                            usageData: _usageData,
-                            title: 'Penggunaan Harian',
-                            yText: 'waktu',
-                          ), // Gunakan widget grafik
+                        ? Center(child: Text("Data tidak ditemukan"))
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                UsageStatsChart(
+                                  title: "Penggunaan Aplikasi",
+                                  yText: "Waktu (menit)",
+                                  usageData: _usageData,
+                                  // titleFontSize: 18.0, // Atur ukuran font judul
+                                  // axisTitleFontSize:
+                                  //     16.0, // Atur ukuran font judul sumbu Y
+                                  // axisLabelFontSize:
+                                  //     14.0, // Atur ukuran font label sumbu
+                                  // dataLabelFontSize:
+                                  //     12.0, // Atur ukuran font label data
+                                ),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: _usageData.length,
+                                    itemBuilder: (context, index) {
+                                      final data = _usageData[index];
+                                      return ListTile(
+                                        leading: _buildAppIcon(data.iconBase64),
+                                        title: Text(data.packageName),
+                                        subtitle: Text(
+                                            "Usage: ${data.usageTime} minutes"),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                   ),
                 ],
               ),
             )
           : Center(
-              child: CircularProgressIndicator(), // Tampilkan loading indicator
+              child: CircularProgressIndicator(),
             ),
     );
   }

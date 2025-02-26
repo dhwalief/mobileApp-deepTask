@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Process
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.BitmapDrawable
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 
@@ -71,14 +73,40 @@ class MainActivity: FlutterActivity() {
         return try {
             val packageManager = getPackageManager()
             val appIcon: Drawable = packageManager.getApplicationIcon(packageName)
-            val bitmap = (appIcon as android.graphics.drawable.BitmapDrawable).bitmap
+            val bitmap = when (appIcon) {
+                is android.graphics.drawable.BitmapDrawable -> appIcon.bitmap
+                is android.graphics.drawable.AdaptiveIconDrawable -> {
+                    val bitmap = Bitmap.createBitmap(appIcon.intrinsicWidth, appIcon.intrinsicHeight, Bitmap.Config.ARGB_8888)
+                    val canvas = android.graphics.Canvas(bitmap)
+                    appIcon.setBounds(0, 0, canvas.width, canvas.height)
+                    appIcon.draw(canvas)
+                    bitmap
+                }
+                else -> null
+            }
+            if (bitmap != null) {
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val byteArray = byteArrayOutputStream.toByteArray()
+                Base64.encodeToString(byteArray, Base64.DEFAULT)
+            } else {
+                // Jika gagal, kembalikan ikon default (misalnya, ikon sistem Android)
+                val defaultIcon = ContextCompat.getDrawable(this, android.R.drawable.sym_def_app_icon)
+                val defaultBitmap = (defaultIcon as BitmapDrawable).bitmap
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val byteArray = byteArrayOutputStream.toByteArray()
+                Base64.encodeToString(byteArray, Base64.DEFAULT)
+            }
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Error getting app icon: $packageName")
+            // Jika terjadi error, kembalikan ikon default
+            val defaultIcon = ContextCompat.getDrawable(this, android.R.drawable.sym_def_app_icon)
+            val defaultBitmap = (defaultIcon as BitmapDrawable).bitmap
             val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
             Base64.encodeToString(byteArray, Base64.DEFAULT)
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error getting app icon: ${e.message}")
-            null
         }
     }
 
@@ -105,7 +133,7 @@ class MainActivity: FlutterActivity() {
                         "firstTimeStamp" to usageStat.firstTimeStamp,
                         "lastTimeUsed" to usageStat.lastTimeUsed,
                         "totalTimeInForeground" to usageStat.totalTimeInForeground,
-                        "appIcon" to (appIcon ?: "") // Pastikan appIcon bertipe Any
+                        // "appIcon" to (appIcon ?: "") // Pastikan appIcon bertipe Any
                     )
                     usageData.add(data)
                 }
